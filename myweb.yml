@@ -1,0 +1,41 @@
+#- hosts: all 
+# tasks:
+#   - package: "name=httpd state=present"
+#   - copy   : "src=sumit.html dest=/var/www/html"
+#   - service: "name=httpd state=started"
+
+---
+- hosts: all
+  vars:
+    webPage: "sumit.html"
+    packageName: "httpd"
+    documentDir: "/var/www/sg"
+
+  tasks:
+    - name: Installed httpd package
+      package:
+        name: "{{ packageName }}"
+        state: present
+
+    - name: create doc root
+      file:
+        state: directory
+        path: "{{ documentDir }}"
+
+    - name: setting conf file
+      copy:
+        dest: "/etc/httpd/conf.d/my.conf"
+        content: "documentroot {{ documentDir }}\n"
+
+    - name: deploy web page
+      copy:
+        src: "{{ webPage }}"
+        dest: "{{ documentDir }}"
+
+    - name: Start and enable httpd service
+      service:
+        name: "httpd"
+        state: reloaded
+        enabled: true
+
+

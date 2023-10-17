@@ -1,0 +1,11 @@
+- hosts: 3.110.177.124
+  vars_files:
+  - myExpVariable.yml
+  
+  tasks:
+  - name: "install package {{ packageName }} ok..."
+    package:
+      name: "{{ packageName }}"
+      state: present
+#      msg: "my name is sumit gupta"
+    when: dosetup
